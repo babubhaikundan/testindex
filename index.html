@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary-color: #4318FF; --secondary-color: #6A11CB; --gradient-bg: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%); --background-color: #f4f7fe; --card-bg-color: rgba(255, 255, 255, 0.95); --text-color: #2B3674; --light-text-color: #A3AED0; }
+        :root { --primary-color: #4318FF; --secondary-color: #6A11CB; --gradient-bg: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%); --background-color: #f4f7fe; --card-bg-color: rgba(255, 255, 255, 0.95); --text-color: #2B3674; --light-text-color: #A3AED0; --border-color: #E0E5F2; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes spin { 100% { transform: rotate(360deg); } }
         #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--background-color); z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease; }
@@ -25,13 +25,25 @@
         .hidden { display: none !important; }
         .card-list { display: grid; gap: 12px; padding: 0; list-style: none; margin: 0; }
         .card-list-item { background-color: #fff; border: 1px solid var(--border-color); border-radius: 10px; padding: 20px; cursor: pointer; transition: all 0.3s ease; display: flex; justify-content: space-between; align-items: center; }
+        .card-list-item:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.07); }
         .card-list-item h3 { margin: 0; font-size: 1.1em; font-weight: 600; }
         .card-counter { font-size: 0.9em; color: var(--light-text-color); font-weight: 500; }
         .start-test-btn { background: var(--gradient-bg); color: white; text-decoration: none; padding: 8px 20px; border-radius: 50px; font-size: 0.9em; font-weight: 600; }
-        .back-btn { background: #f0f2f5; color: var(--primary-color); border: 2px solid var(--primary-color); padding: 8px 20px; border-radius: 50px; cursor: pointer; font-size: 0.9em; font-weight: 600; margin-bottom: 25px; }
+        .back-btn { background: #f0f2f5; color: var(--primary-color); border: none; padding: 8px 20px; border-radius: 50px; cursor: pointer; font-size: 0.9em; font-weight: 600; margin-bottom: 25px; }
         .search-container { margin-bottom: 25px; }
-        #search-bar { width: 100%; padding: 15px; font-size: 1em; border-radius: 10px; border: 1px solid #e0e5f2; box-sizing: border-box; }
+        #search-bar { width: 100%; padding: 15px; font-size: 1em; border-radius: 10px; border: 1px solid var(--border-color); box-sizing: border-box; }
         #search-bar:focus { border-color: var(--primary-color); outline: none; box-shadow: 0 0 0 3px rgba(67, 24, 255, 0.2); }
+        .history-btn { background: transparent; color: var(--primary-color); border: 2px solid var(--primary-color); padding: 8px 15px; border-radius: 50px; cursor: pointer; font-weight: 600; font-size: 0.9em; transition: all 0.2s; }
+        .history-btn:hover { background: var(--primary-color); color: #fff; }
+        .history-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; display: flex; justify-content: center; align-items: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.3s; box-sizing: border-box; }
+        .history-modal.show { opacity: 1; pointer-events: all; }
+        .history-card { background: #fff; padding: 30px; border-radius: 15px; width: 100%; max-width: 600px; max-height: 80vh; overflow-y: auto; box-sizing: border-box; transform: scale(0.95); transition: transform 0.3s; }
+        .history-modal.show .history-card { transform: scale(1); }
+        .history-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .history-table th, .history-table td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+        .history-table th { font-weight: 600; color: var(--text-color); }
+        .history-table td { color: var(--light-text-color); font-weight: 500; }
+        .history-table .score { font-weight: 700; color: var(--primary-color); }
         @media (max-width: 768px) { .container { padding-top: 130px; padding-left:10px; padding-right:10px;} .app-header { flex-direction: column; gap: 10px; padding: 15px; } }
     </style>
 </head>
@@ -49,7 +61,7 @@
     <div class='container'>
         <div id='spa-wrapper'>
             <div id='home-view' class='view'>
-                <div class="search-container">
+                 <div class="search-container">
                     <input type="text" id="search-bar" placeholder="Search for an exam, subject, or test...">
                 </div>
                 <div id="home-view-content"></div>
@@ -96,6 +108,47 @@
                 });
             };
 
+            const showHistoryModal = () => {
+                const history = JSON.parse(localStorage.getItem('testHistory') || '[]');
+                const modal = document.createElement('div');
+                modal.className = 'history-modal';
+                
+                let tableRows = '<tr><th>Test Name</th><th>Score</th><th>Date</th></tr>';
+                if (history.length > 0) {
+                    history.reverse().forEach(item => {
+                        tableRows += `<tr><td>${item.testTitle}</td><td class="score">${item.score}</td><td>${new Date(item.date).toLocaleString()}</td></tr>`;
+                    });
+                } else {
+                    tableRows = `<tr><td colspan="3" style="text-align:center;">No test history found.</td></tr>`;
+                }
+
+                modal.innerHTML = `
+                    <div class="history-card">
+                        <div style="display:flex; justify-content: space-between; align-items: center;">
+                            <h2>My Test History</h2>
+                            <button class="history-btn" style="border:none; font-size:1.8em; padding:0 10px; line-height:1;">&times;</button>
+                        </div>
+                        <table class="history-table">${tableRows}</table>
+                    </div>
+                `;
+                
+                document.body.appendChild(modal);
+                setTimeout(() => modal.classList.add('show'), 10);
+
+                const closeButton = modal.querySelector('button');
+                const closeModal = () => {
+                    modal.classList.remove('show');
+                    setTimeout(() => document.body.removeChild(modal), 300);
+                };
+
+                closeButton.addEventListener('click', closeModal);
+                modal.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('history-modal')) {
+                        closeModal();
+                    }
+                });
+            };
+
             const renderTestListPage = (pushState = true) => {
                 document.getElementById('search-bar').value = ''; 
                 const exam = testData[currentState.examKey];
@@ -126,7 +179,14 @@
 
             const renderHomePage = (pushState = true) => {
                 const homeViewContent = document.getElementById('home-view-content');
-                homeViewContent.innerHTML = `<ul id="exam-list-container" class="card-list"></ul>`;
+                homeViewContent.innerHTML = `<div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 style="margin:0;">Exam Categories</h2>
+                    <button class="history-btn" id="show-history-btn">Test History</button>
+                </div>
+                <ul id="exam-list-container" class="card-list"></ul>`;
+                
+                homeViewContent.querySelector('#show-history-btn').addEventListener('click', showHistoryModal);
+                
                 const container = homeViewContent.querySelector('#exam-list-container');
                 Object.keys(testData).forEach((examKey) => {
                     const exam = testData[examKey];
