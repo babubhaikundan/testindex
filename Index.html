@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Kundan Test Series Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary-color: #4318FF; --secondary-color: #6A11CB; --gradient-bg: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%); --background-color: #f4f7fe; --card-bg-color: rgba(255, 255, 255, 0.95); --text-color: #2B3674; --light-text-color: #A3AED0; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--background-color); z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease; }
+        .spinner { width: 50px; height: 50px; border-radius: 50%; border: 5px solid #E0E5F2; border-top-color: var(--primary-color); animation: spin 1s linear infinite; }
+        body { font-family: 'Poppins', sans-serif; margin: 0; background-color: var(--background-color); background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23E0E5F2' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); color: var(--text-color); opacity: 0; transition: opacity 0.5s ease-in-out; }
+        body.loaded { opacity: 1; }
+        .container { max-width: 900px; margin: 0 auto; padding: 80px 20px 20px 20px; }
+        .app-header { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 15px 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border-bottom: 1px solid rgba(0,0,0,0.05); position: fixed; top: 0; left:0; right:0; z-index: 1000; display: flex; justify-content: space-between; align-items: center; }
+        .app-header h1 { margin: 0; font-size: 1.6em; font-weight: 700; color: var(--primary-color); }
+        .telegram-btn { display: flex; align-items: center; gap: 8px; background: #2AABEE; color: white; padding: 8px 15px; border-radius: 50px; text-decoration: none; font-weight: 500; font-size: 0.9em; transition: transform 0.2s; white-space: nowrap; }
+        .app-footer { text-align: center; padding: 20px; margin-top: 30px; font-size: 0.9em; color: var(--light-text-color); font-weight: 500; }
+        .footer-link { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .view { background: var(--card-bg-color); border: 1px solid var(--border-color); border-radius: 15px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); animation: fadeIn 0.5s ease-out; }
+        .hidden { display: none !important; }
+        .card-list { display: grid; gap: 12px; padding: 0; list-style: none; margin: 0; }
+        .card-list-item { background-color: #fff; border: 1px solid var(--border-color); border-radius: 10px; padding: 20px; cursor: pointer; transition: all 0.3s ease; display: flex; justify-content: space-between; align-items: center; }
+        .card-list-item h3 { margin: 0; font-size: 1.1em; font-weight: 600; }
+        .card-counter { font-size: 0.9em; color: var(--light-text-color); font-weight: 500; }
+        .start-test-btn { background: var(--gradient-bg); color: white; text-decoration: none; padding: 8px 20px; border-radius: 50px; font-size: 0.9em; font-weight: 600; }
+        .back-btn { background: #f0f2f5; color: var(--primary-color); border: 2px solid var(--primary-color); padding: 8px 20px; border-radius: 50px; cursor: pointer; font-size: 0.9em; font-weight: 600; margin-bottom: 25px; }
+        .search-container { margin-bottom: 25px; }
+        #search-bar { width: 100%; padding: 15px; font-size: 1em; border-radius: 10px; border: 1px solid #e0e5f2; box-sizing: border-box; }
+        #search-bar:focus { border-color: var(--primary-color); outline: none; box-shadow: 0 0 0 3px rgba(67, 24, 255, 0.2); }
+        @media (max-width: 768px) { .container { padding-top: 130px; padding-left:10px; padding-right:10px;} .app-header { flex-direction: column; gap: 10px; padding: 15px; } }
+    </style>
+</head>
+<body>
+    <div id='preloader'><div class='spinner'></div></div>
+    
+    <header class='app-header'>
+        <h1><a href="/" style='color:inherit;text-decoration:none;'>Kundan Test Series Hub</a></h1>
+        <a class='telegram-btn' href='https://t.me/kundan_yadav_bot' rel='noopener noreferrer' target='_blank'>
+            <svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='currentColor' viewBox='0 0 16 16'><path d='M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.287 5.906c-.778.324-2.334.994-4.666 2.01-.378.15-.577.298-.595.442-.03.243.275.339.69.47l.175.055c.408.133.958.288 1.243.294.26.006.549-.1.868-.32 2.179-1.471 3.304-2.214 3.374-2.23.05-.012.12-.026.166.016.047.041.042.12.037.141-.03.129-1.227 1.241-1.846 1.817-.193.18-.33.307-.358.336a8.154 8.154 0 0 1-.188.186c-.38.366-.664.64.015 1.088.327.216.589.393.85.571.284.194.568.387.936.629.093.06.183.125.27.187.331.236.63.448.997.414.214-.02.435-.22.547-.82.265-1.417.786-4.486.906-5.751a1.426 1.426 0 0 0-.013-.315.337.337 0 0 0-.114-.217.526.526 0 0 0-.31-.093c-.3.005-.763.166-2.984 1.09z'/></svg>
+            Contact On Telegram
+        </a>
+    </header>
+    
+    <div class='container'>
+        <div id='spa-wrapper'>
+            <div id='home-view' class='view'>
+                <div class="search-container">
+                    <input type="text" id="search-bar" placeholder="Search for an exam, subject, or test...">
+                </div>
+                <div id="home-view-content"></div>
+            </div>
+            <div id='subject-view' class='view hidden'></div>
+            <div id='test-list-view' class='view hidden'></div>
+        </div>
+    </div>
+    
+    <footer class='app-footer'>
+        <span>© 2025 | Developed with ❤️ by</span>
+        <a class='footer-link' href='https://instagram.com/babubhaikundan' rel='noopener noreferrer'>𝕂𝕦𝕟𝕕𝕒𝕟 𝕐𝕒𝕕𝕒𝕧 😎</a>
+    </footer>
+    
+    <script>
+    //<![CDATA[
+        async function startApp() {
+            const GITHUB_USERNAME = "babubhaikundan";
+            const REPO_NAME = "Test-Series-Demo";
+            const BASE_URL = `https://${GITHUB_USERNAME}.github.io/${REPO_NAME}/`;
+            try {
+                const response = await fetch(`${BASE_URL}tests.json?t=${new Date().getTime()}`);
+                if (!response.ok) throw new Error(`Network response error.`);
+                const testData = await response.json();
+                runSPA(testData, BASE_URL);
+            } catch (error) {
+                document.getElementById('home-view').innerHTML = `<div style='text-align:center;color:red;padding:20px;'><b>Error:</b> Could not load test list.</div>`;
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        function runSPA(testData, BASE_URL) {
+            const views = { home: document.getElementById('home-view'), subjects: document.getElementById('subject-view'), tests: document.getElementById('test-list-view') };
+            let currentState = {};
+            const iconChevron = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" style="color: var(--primary-color);"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/></svg>`;
+            
+            const showView = (viewName) => { Object.values(views).forEach(v => v.classList.add('hidden')); views[viewName].classList.remove('hidden'); window.scrollTo(0, 0); };
+            
+            const handleSearch = () => {
+                const searchTerm = document.getElementById('search-bar').value.toLowerCase();
+                document.querySelectorAll('.card-list-item').forEach(item => {
+                    const itemText = item.textContent.toLowerCase();
+                    item.style.display = itemText.includes(searchTerm) ? 'flex' : 'none';
+                });
+            };
+
+            const renderTestListPage = (pushState = true) => {
+                document.getElementById('search-bar').value = ''; 
+                const exam = testData[currentState.examKey];
+                const subject = exam.subjects[currentState.subjectKey];
+                let listHTML = subject.tests.length > 0 ? subject.tests.map((test) => `<li class="card-list-item" style="justify-content: space-between;"><h3>${test.name}</h3><a href="${BASE_URL + test.file}" target="_blank" rel="noopener noreferrer" class="start-test-btn">Start Test</a></li>`).join('') : `<div style='text-align:center;padding:20px;color:var(--light-text-color);'>No tests available.</div>`;
+                views.tests.innerHTML = `<button class="back-btn" id="back-to-subjects">Back</button><h2>${subject.name}</h2><ul class="card-list">${listHTML}</ul>`;
+                views.tests.querySelector('#back-to-subjects').addEventListener('click', () => renderSubjectPage());
+                showView('tests');
+                handleSearch();
+                if (pushState) { history.pushState({ view: 'tests', examKey: currentState.examKey, subjectKey: currentState.subjectKey }, '', '#tests'); }
+            };
+
+            const renderSubjectPage = (pushState = true) => {
+                document.getElementById('search-bar').value = '';
+                const exam = testData[currentState.examKey];
+                let listHTML = '';
+                Object.keys(exam.subjects).forEach((subjectKey) => {
+                    const subject = exam.subjects[subjectKey];
+                    listHTML += `<li class="card-list-item" data-subject="${subjectKey}"><div class="card-list-item-content"><div><h3>${subject.name}</h3><span class="card-counter">${subject.tests.length} Tests</span></div></div>${iconChevron}</li>`;
+                });
+                views.subjects.innerHTML = `<button class="back-btn" id="back-to-home">Back</button><h2>${exam.name}</h2><ul class="card-list">${listHTML}</ul>`;
+                views.subjects.querySelector('#back-to-home').addEventListener('click', () => renderHomePage());
+                views.subjects.querySelector('.card-list').addEventListener('click', (e) => { const target = e.target.closest('.card-list-item'); if (target) { currentState.subjectKey = target.dataset.subject; renderTestListPage(); } });
+                showView('subjects');
+                handleSearch();
+                if (pushState) { history.pushState({ view: 'subjects', examKey: currentState.examKey }, '', '#subjects'); }
+            };
+
+            const renderHomePage = (pushState = true) => {
+                const homeViewContent = document.getElementById('home-view-content');
+                homeViewContent.innerHTML = `<ul id="exam-list-container" class="card-list"></ul>`;
+                const container = homeViewContent.querySelector('#exam-list-container');
+                Object.keys(testData).forEach((examKey) => {
+                    const exam = testData[examKey];
+                    const subjectCount = Object.keys(exam.subjects).length;
+                    const listItem = document.createElement('li');
+                    listItem.className = 'card-list-item';
+                    listItem.dataset.exam = examKey;
+                    listItem.innerHTML = `<div class="card-list-item-content"><div><h3>${exam.name}</h3><span class="card-counter">${subjectCount} Subjects</span></div></div>${iconChevron}</li>`;
+                    container.appendChild(listItem);
+                });
+                container.addEventListener('click', (e) => { const target = e.target.closest('.card-list-item'); if (target) { currentState.examKey = target.dataset.exam; renderSubjectPage(); } });
+                
+                document.getElementById('search-bar').addEventListener('input', handleSearch);
+                
+                showView('home');
+                handleSearch();
+                if (pushState) { history.pushState({ view: 'home' }, '', '/'); }
+            };
+            
+            window.onpopstate = (event) => {
+                if (event.state) {
+                    currentState = event.state;
+                    if (event.state.view === 'subjects') { renderSubjectPage(false); } 
+                    else if (event.state.view === 'tests') { renderTestListPage(false); } 
+                    else { renderHomePage(false); }
+                }
+            };
+            
+            history.replaceState({ view: 'home' }, '', '/');
+            renderHomePage(false);
+        }
+
+        document.addEventListener('DOMContentLoaded', startApp);
+        window.addEventListener('load', () => { const preloader = document.getElementById('preloader'); if (preloader) { preloader.style.opacity = '0'; setTimeout(() => { preloader.style.display = 'none'; }, 500); } document.body.classList.add('loaded'); });
+    //]]>
+    </script>
+</body>
+</html>
