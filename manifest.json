@@ -1,0 +1,17 @@
+{
+  "name": "Kundan Test Series Hub",
+  "short_name": "Kundan Tests",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#f4f7fe",
+  "theme_color": "#4318FF",
+  "orientation": "portrait-primary",
+  "icons": [
+    
+    {
+      "src": "/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
