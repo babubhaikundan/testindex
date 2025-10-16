@@ -5,7 +5,7 @@ const CACHE_NAME = 'kundan-test-series-v1';
 const urlsToCache = [
   '/',
   '/index.html',
-  '/test-runner.html',
+  
   // Aap yahan apni CSS aur JS files ka naam bhi daal sakte hain
 ];
 
