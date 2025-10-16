@@ -235,6 +235,20 @@
         document.addEventListener('DOMContentLoaded', startApp);
         window.addEventListener('load', () => { const preloader = document.getElementById('preloader'); if (preloader) { preloader.style.opacity = '0'; setTimeout(() => { preloader.style.display = 'none'; }, 500); } document.body.classList.add('loaded'); });
     //]]>
+
+        <!-- START Service Worker ko register karne ka code -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').then(registration => {
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+      }, err => {
+        console.log('ServiceWorker registration failed: ', err);
+      });
+    });
+  }
+</script>
+<!-- END: Service Worker ka code yahan khatam -->
     </script>
 </body>
 </html>
